@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>M n Dubai l casa — Click & Collect</title>
-<meta name="description" content="Café-desserts M n Dubai l casa. Commandez en ligne, retirez sur place.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="description" content="Café-desserts M n Dubai l casa. Commandez en ligne, retirez sur place ou faites-vous livrer.">
+<link rel="preconnect" href="https://googleapis.com">
+<link rel="preconnect" href="https://gstatic.com" crossorigin>
+<link href="https://googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* ============ DESIGN TOKENS ============ */
   :root{
@@ -45,7 +45,11 @@
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
     line-height: 1.5;
-    padding-bottom: 120px; /* room for cart bar */
+    padding-bottom: 140px;
+  }
+
+  html[dir="rtl"] body {
+    font-family: system-ui, -apple-system, sans-serif;
   }
 
   /* ============ HEADER / NAV ============ */
@@ -63,34 +67,73 @@
     max-width: 720px;
     margin: 0 auto;
     padding: 16px 24px;
-    display:flex;
+    display:flex !important;
     align-items:center;
     justify-content:space-between;
+    gap: 16px;
+    direction: ltr !important; /* Намертво блокирует разворот шапки в RTL */
   }
 
   .brand{
     font-weight: 800;
-    font-size: 16px;
-    letter-spacing: -.02em;
+    font-size: 24px;
+    letter-spacing: -.03em;
+    color: var(--ink);
+    white-space: nowrap;
+    direction: ltr !important;
+    text-align: left !important;
   }
 
-  .brand span{ color: var(--pistachio-700); }
+  .brand span{ 
+    color: var(--pistachio-700); 
+    font-weight: 500;
+    font-style: italic;
+    margin-left: 2px;
+  }
 
-  .badge{
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--pistachio-700);
+  .lang-toggle {
+    display: flex;
+    gap: 2px;
     background: var(--pistachio-50);
-    border: 1px solid var(--pistachio-100);
-    padding: 6px 12px;
+    padding: 4px;
     border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    direction: ltr !important;
   }
 
+  .lang-btn {
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-radius: var(--radius-pill);
+    transition: all 0.2s var(--ease-smooth);
+    direction: ltr !important;
+  }
+
+  .lang-btn.active {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Защита внутренних элементов шапки от глобального RTL режима */
+  .brand, .lang-toggle, .lang-btn {
+    direction: ltr !important;
+    text-align: left !important;
+  }
+  html[dir="rtl"] .brand span {
+    margin-left: 2px !important;
+    margin-right: 0 !important;
+  }
   /* ============ HERO ============ */
   .hero{
     max-width: 720px;
     margin: 0 auto;
-    padding: 72px 24px 48px;
+    padding: 64px 24px 36px;
     text-align: center;
   }
 
@@ -108,10 +151,10 @@
   }
 
   .hero h1{
-    font-size: clamp(34px, 7vw, 56px);
+    font-size: clamp(34px, 7vw, 52px);
     font-weight: 800;
     letter-spacing: -.035em;
-    line-height: 1.08;
+    line-height: 1.1;
   }
 
   .hero h1 em{
@@ -121,8 +164,8 @@
 
   .hero p{
     margin: 20px auto 0;
-    max-width: 440px;
-    font-size: 17px;
+    max-width: 480px;
+    font-size: 16px;
     color: var(--ink-soft);
   }
 
@@ -130,7 +173,7 @@
     display:inline-flex;
     align-items:center;
     gap: 8px;
-    margin-top: 32px;
+    margin-top: 28px;
     padding: 14px 28px;
     background: var(--ink);
     color: #fff;
@@ -143,22 +186,66 @@
 
   .hero-cta:hover{ background: var(--pistachio-900); transform: translateY(-2px); }
 
+  /* ============ TАБЫ КАТЕГОРИЙ (СКРОЛЛ) ============ */
+  .tabs-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: sticky;
+    top: 68px;
+    z-index: 40;
+    background: var(--bg);
+  }
+
+  .tabs-wrapper {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 12px 0 16px;
+    scrollbar-width: none;
+  }
+
+  .tabs-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.25s var(--ease-smooth);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tab-btn.active {
+    background: var(--pistachio-500);
+    color: #fff;
+    border-color: var(--pistachio-500);
+    box-shadow: 0 4px 12px rgba(143,181,115,.25);
+  }
+
   /* ============ MENU ============ */
   .menu{
     max-width: 720px;
     margin: 0 auto;
-    padding: 32px 24px 64px;
+    padding: 10px 24px 48px;
   }
 
   .menu-head{
     display:flex;
     align-items:baseline;
     justify-content:space-between;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .menu-head h2{
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     letter-spacing: -.02em;
   }
@@ -180,14 +267,20 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap: 16px;
-    padding: 22px 24px;
+    gap: 20px;
+    padding: 20px 24px;
     transition: background .2s;
   }
 
   .menu-item:hover{ background: var(--pistachio-50); }
-
   .menu-item + .menu-item{ border-top: 1px solid var(--border); }
+
+  .item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-grow: 1;
+  }
 
   .item-info h3{
     font-size: 16px;
@@ -195,11 +288,15 @@
     letter-spacing: -.01em;
   }
 
+  .item-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+
   .item-price{
-    display:inline-block;
-    margin-top: 4px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--pistachio-700);
   }
 
@@ -207,14 +304,16 @@
   .item-action{
     position: relative;
     flex-shrink: 0;
+    width: 100px;
+    height: 40px;
   }
 
   .btn-add{
+    position: absolute;
+    inset: 0;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    height: 42px;
-    padding: 0 22px;
     border: none;
     border-radius: var(--radius-pill);
     background: var(--orange);
@@ -223,76 +322,61 @@
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(255,162,69,.35);
-    transition: opacity .25s var(--ease-smooth),
-                transform .3s var(--ease-spring),
-                background .2s;
+    box-shadow: 0 2px 8px rgba(255,162,69,.25);
+    transition: opacity .2s var(--ease-smooth), transform .25s var(--ease-spring), background .2s;
+    z-index: 2;
   }
 
   .btn-add:hover{ background: var(--orange-hover); transform: translateY(-1px); }
-  .btn-add:active{ transform: scale(.96); }
 
   .stepper{
     position: absolute;
-    top: 0;
-    right: 0;
+    inset: 0;
     display:flex;
     align-items:center;
-    height: 42px;
+    justify-content:space-between;
     background: var(--orange-soft);
     border: 1.5px solid var(--orange);
     border-radius: var(--radius-pill);
     overflow: hidden;
     opacity: 0;
-    transform: scaleX(.4);
-    transform-origin: right center;
-    pointer-events: none;
-    transition: opacity .25s var(--ease-smooth),
-                transform .35s var(--ease-spring);
-  }
-
-  .item-action.active .btn-add{
-    opacity: 0;
     transform: scaleX(.6);
+    transform-origin: center;
     pointer-events: none;
+    transition: opacity .2s var(--ease-smooth), transform .25s var(--ease-spring);
+    z-index: 1;
   }
 
-  .item-action.active .stepper{
-    opacity: 1;
-    transform: scaleX(1);
-    pointer-events: auto;
-  }
+  .item-action.active .btn-add{ opacity: 0; transform: scale(.7); pointer-events: none; }
+  .item-action.active .stepper{ opacity: 1; transform: scaleX(1); pointer-events: auto; }
 
   .stepper button{
-    width: 42px;
-    height: 42px;
+    width: 32px;
+    height: 100%;
     border: none;
     background: transparent;
     color: var(--orange-hover);
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     cursor: pointer;
-    line-height: 1;
-    transition: background .15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .stepper button:hover{ background: rgba(255,162,69,.15); }
-  .stepper button:active{ background: rgba(255,162,69,.28); }
+  .stepper button:hover{ background: rgba(255,162,69,.1); }
 
   .stepper .qty{
-    min-width: 28px;
-    text-align:center;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--ink);
-    font-variant-numeric: tabular-nums;
   }
 
   /* ============ INFO STRIP ============ */
   .info-strip{
     max-width: 720px;
     margin: 0 auto;
-    padding: 0 24px 64px;
+    padding: 0 24px 48px;
     display:grid;
     grid-template-columns: 1fr;
     gap: 12px;
@@ -306,7 +390,7 @@
     background: var(--pistachio-50);
     border: 1px solid var(--pistachio-100);
     border-radius: var(--radius-md);
-    padding: 18px 20px;
+    padding: 16px 18px;
   }
 
   .info-tile strong{
@@ -335,75 +419,42 @@
   .cart-bar{
     position: fixed;
     left: 50%;
-    bottom: 16px;
-    transform: translate(-50%, 140%);
+    bottom: 24px;
+    transform: translate(-50%, 160%);
     width: calc(100% - 32px);
     max-width: 560px;
     display:flex;
     align-items:center;
     justify-content:space-between;
     gap: 16px;
-    padding: 14px 16px 14px 22px;
-    background: rgba(255,255,255,.72);
-    backdrop-filter: blur(20px) saturate(1.4);
-    -webkit-backdrop-filter: blur(20px) saturate(1.4);
-    border: 1px solid rgba(232,237,229,.9);
+    padding: 12px 14px 12px 24px;
+    background: rgba(255,255,255,.75);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border: 1px solid rgba(28,36,24,.06);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     z-index: 90;
-    transition: transform .45s var(--ease-spring), opacity .3s;
-    opacity: 0;
-    pointer-events: none;
+    transition: transform .4s var(--ease-spring);
   }
 
-  .cart-bar.visible{
-    transform: translate(-50%, 0);
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  ```css
-  .cart-summary{
-    display:flex;
-    flex-direction:column;
-    gap: 2px;
-  }
-
-  .cart-count{
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink-soft);
-  }
-
-  .cart-total{
-    font-size: 19px;
-    font-weight: 800;
-    letter-spacing: -.02em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .cart-total small{
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--pistachio-700);
-  }
+  .cart-bar.visible{ transform: translate(-50%, 0); }
+  .cart-summary{ display:flex; flex-direction:column; }
+  .cart-count{ font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--pistachio-700); }
+  .cart-total{ font-size: 18px; font-weight: 800; color: var(--ink); }
 
   .btn-order{
-    border: none;
-    padding: 14px 28px;
-    border-radius: var(--radius-pill);
+    padding: 12px 24px;
     background: var(--ink);
     color: #fff;
-    font-family: inherit;
+    border: none;
+    border-radius: var(--radius-pill);
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: background .2s, transform .25s var(--ease-spring);
+    transition: background .2s, transform .1s;
   }
-
-  .btn-order:hover{ background: var(--pistachio-900); transform: translateY(-1px); }
-  .btn-order:active{ transform: scale(.97); }
-
+  .btn-order:hover{ background: #000; }
   /* ============ MODAL ============ */
   .modal-overlay{
     position: fixed;
@@ -421,14 +472,8 @@
     padding: 16px;
   }
 
-  @media (min-width: 560px){
-    .modal-overlay{ align-items:center; }
-  }
-
-  .modal-overlay.open{
-    opacity: 1;
-    pointer-events: auto;
-  }
+  @media (min-width: 560px){ .modal-overlay{ align-items:center; } }
+  .modal-overlay.open{ opacity: 1; pointer-events: auto; }
 
   .modal{
     width: 100%;
@@ -436,193 +481,139 @@
     background: var(--surface);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
-    padding: 28px 26px;
+    padding: 28px 24px;
     transform: translateY(32px) scale(.97);
     transition: transform .4s var(--ease-spring);
     max-height: calc(100vh - 32px);
     overflow-y: auto;
   }
+  .modal-overlay.open .modal{ transform: translateY(0) scale(1); }
 
-  .modal-overlay.open .modal{
-    transform: translateY(0) scale(1);
-  }
+  .modal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 16px; }
+  .modal-head h2{ font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+  .modal-close{ width: 34px; height: 34px; border: none; border-radius: 50%; background: var(--pistachio-50); color: var(--ink-soft); font-size: 16px; cursor: pointer; }
 
-  .modal-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom: 20px;
-  }
-
-  .modal-head h2{
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -.02em;
-  }
-
-  .modal-close{
-    width: 34px;
-    height: 34px;
-    border: none;
-    border-radius: 50%;
-    background: var(--pistachio-50);
-    color: var(--ink-soft);
-    font-size: 16px;
-    cursor: pointer;
-    transition: background .15s;
-  }
-
-  .modal-close:hover{ background: var(--pistachio-100); }
-
-  .order-list{
-    list-style: none;
-    background: var(--pistachio-50);
-    border: 1px solid var(--pistachio-100);
+  .fulfillment-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    background: var(--bg);
+    padding: 4px;
     border-radius: var(--radius-md);
-    padding: 6px 16px;
-    margin-bottom: 8px;
-  }
-
-  .order-list li{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding: 10px 0;
-    font-size: 14px;
-  }
-
-  .order-list li + li{ border-top: 1px dashed var(--pistachio-100); }
-
-  .order-list .li-name{ font-weight: 500; }
-  .order-list .li-name small{
-    color: var(--pistachio-700);
-    font-weight: 700;
-    margin-left: 6px;
-  }
-  .order-list .li-sum{
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .order-grand{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding: 12px 4px;
+    border: 1.5px solid var(--border);
     margin-bottom: 20px;
-    font-weight: 800;
-    font-size: 16px;
   }
 
-  .field{
+  .fulfill-btn {
+    background: transparent;
+    border: none;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+  }
+
+  .fulfill-btn.active {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .order-list{ list-style: none; background: var(--pistachio-50); border: 1px solid var(--pistachio-100); border-radius: var(--radius-md); padding: 6px 16px; margin-bottom: 16px; }
+  .order-list li{ display:flex; justify-content:space-between; align-items:center; padding: 10px 0; font-size: 14px; }
+  .order-list li + li{ border-top: 1px dashed var(--pistachio-100); }
+  .order-list .li-name{ font-weight: 500; }
+  .order-list .li-name small{ color: var(--pistachio-700); font-weight: 700; margin-left: 6px; }
+  html[dir="rtl"] .order-list .li-name small { margin-left: 0; margin-right: 6px; }
+  .order-list .li-sum{ font-weight: 600; }
+
+  .order-grand{ display:flex; justify-content:space-between; align-items:center; padding: 0 4px 16px; font-weight: 800; font-size: 16px; }
+
+  .field{ margin-bottom: 16px; }
+  .field.hidden { display: none; }
+  .field label{ display:block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  
+  .field input, .field textarea {
+    width: 100%; height: 48px; padding: 0 16px; font-family: inherit; font-size: 15px; color: var(--ink); background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius-md); outline: none; transition: border-color .2s, box-shadow .2s;
+  }
+  .field textarea { height: 72px; padding: 12px 16px; resize: none; }
+  .field input:focus, .field textarea:focus { border-color: var(--pistachio-500); box-shadow: 0 0 0 4px rgba(143,181,115,.15); background: #fff; }
+
+  .time-alert {
+    display: none;
+    background: #FFF0F0;
+    border: 1px solid #FFD0D0;
+    color: #D03030;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
     margin-bottom: 16px;
   }
 
-  .field label{
-    display:block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 6px;
-  }
-
-  .field input{
-    width: 100%;
-    height: 48px;
-    padding: 0 16px;
-    font-family: inherit;
-    font-size: 15px;
-    color: var(--ink);
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-md);
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
-  }
-
-  .field input:focus{
-    border-color: var(--pistachio-500);
-    box-shadow: 0 0 0 4px rgba(143,181,115,.15);
-    background: #fff;
-  }
-
-  .btn-confirm{
-    width: 100%;
-    height: 52px;
-    margin-top: 8px;
-    border: none;
-    border-radius: var(--radius-pill);
-    background: var(--orange);
-    color: #fff;
-    font-family: inherit;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(255,162,69,.4);
-    transition: background .2s, transform .25s var(--ease-spring);
-  }
-
+  .btn-confirm{ width: 100%; height: 52px; border: none; border-radius: var(--radius-pill); background: var(--orange); color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(255,162,69,.3); transition: background .2s, transform .25s var(--ease-spring); }
   .btn-confirm:hover{ background: var(--orange-hover); transform: translateY(-1px); }
-  .btn-confirm:active{ transform: scale(.98); }
+  .btn-confirm:disabled { background: #E0E5DF; color: #A0A5A0; cursor: not-allowed; box-shadow: none; transform: none; }
 
-  .modal-note{
-    margin-top: 14px;
-    text-align:center;
-    font-size: 12px;
-    color: var(--ink-soft);
-  }
+  .modal-note{ margin-top: 14px; text-align:center; font-size: 12px; color: var(--ink-soft); }
 </style>
 </head>
 <body>
 
-  <!-- ============ HEADER ============ -->
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand">M n Dubai <span>l casa</span></div>
-      <div class="badge">Click &amp; Collect</div>
+      <div class="lang-toggle" id="langToggle">
+        <button class="lang-btn active" data-lang="fr">Fr</button>
+        <button class="lang-btn" data-lang="en">En</button>
+        <button class="lang-btn" data-lang="ar">Ar</button>
+      </div>
     </div>
   </header>
 
-  <!-- ============ HERO ============ -->
   <section class="hero">
-    <span class="hero-eyebrow">Café &middot; Desserts &middot; Casablanca</span>
-    <h1>Des douceurs<br><em>à emporter</em></h1>
-    <p>Commandez en ligne en quelques secondes et récupérez votre commande directement au comptoir. Sans attente, sans livraison.</p>
-    <a href="#menu" class="hero-cta">Voir le menu &darr;</a>
+    <span class="hero-eyebrow" id="heroEyebrow">Café · Desserts · Casablanca</span>
+    <h1 id="heroTitle">Des douceurs<br><em>à emporter</em></h1>
+    <p id="heroDesc">Commandez en ligne en quelques secondes et récupérez votre commande directement au comptoir. Sans attente, sans livraison.</p>
+    <a href="#menu" class="hero-cta" id="heroCta">Voir le menu &darr;</a>
   </section>
 
-  <!-- ============ MENU ============ -->
+  <div class="tabs-container">
+    <div class="tabs-wrapper" id="tabsWrapper"></div>
+  </div>
+
   <main class="menu" id="menu">
     <div class="menu-head">
-      <h2>Notre menu</h2>
-      <span>Prix en MAD</span>
+      <h2 id="menuTitle">Notre menu</h2>
+      <span id="menuSub">Prix en MAD</span>
     </div>
-
-    <div class="menu-card" id="menuCard"><!-- items injected by JS --></div>
+    <div class="menu-card" id="menuCard"></div>
   </main>
 
-  <!-- ============ INFO ============ -->
   <section class="info-strip">
-    <div class="info-tile">
+    <div class="info-tile" id="tile1">
       <strong>Retrait sur place</strong>
       <span>Prêt en 10–15 minutes</span>
     </div>
-    <div class="info-tile">
+    <div class="info-tile" id="tile2">
       <strong>Paiement au comptoir</strong>
       <span>Espèces ou carte</span>
     </div>
-    <div class="info-tile">
+    <div class="info-tile" id="tile3">
       <strong>Horaires</strong>
-      <span>Tous les jours, 9h – 22h</span>
+      <span>Tous les jours, 12h00 – 23h30</span>
     </div>
   </section>
 
-  <footer>
-    &copy; 2025 M n Dubai l casa — Casablanca. Commande à emporter uniquement.
+  <footer id="footerEl">
+    &copy; 2026 M n Dubai l casa — Casablanca.
   </footer>
 
-  <!-- ============ CART BAR ============ -->
-  <div class="cart-bar" id="cartBar" role="region" aria-label="Panier">
+  <div class="cart-bar" id="cartBar">
     <div class="cart-summary">
       <span class="cart-count" id="cartCount">0 article</span>
       <span class="cart-total"><span id="cartTotal">0</span> <small>MAD</small></span>
@@ -630,236 +621,165 @@
     <button class="btn-order" id="btnOrder">Commander</button>
   </div>
 
-  <!-- ============ MODAL ============ -->
-  <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
       <div class="modal-head">
         <h2 id="modalTitle">Votre commande</h2>
-        <button class="modal-close" id="modalClose" aria-label="Fermer">&#10005;</button>
+        <button class="modal-close" id="modalClose">✕</button>
       </div>
 
-      <ul class="order-list" id="orderList"></ul>
+      <div class="fulfillment-toggle" id="fulfillToggle">
+        <button type="button" class="fulfill-btn active" data-mode="pickup" id="modePickup">À emporter</button>
+        <button type="button" class="fulfill-btn" data-mode="delivery" id="modeDelivery">Livraison</button>
+      </div>
 
       <div class="order-grand">
-        <span>Total</span>
+        <span id="labelTotal">Total</span>
         <span><span id="orderTotal">0</span> MAD</span>
       </div>
 
-      <form id="orderForm" novalidate>
+      <form id="orderForm">
         <div class="field">
-          <label for="phone">Numéro de téléphone</label>
+          <label for="phone" id="labelPhone">Numéro de téléphone</label>
           <input type="tel" id="phone" placeholder="06 12 34 56 78" required>
         </div>
-        <div class="field">
-          <label for="pickupTime">Heure de retrait souhaitée</label>
+        
+        <div class="field" id="fTime">
+          <label for="pickupTime" id="labelTime">Heure de retrait souhaitée</label>
           <input type="time" id="pickupTime" required>
         </div>
-        <button type="submit" class="btn-confirm">Confirmer</button>
-      </form>
 
-      <p class="modal-note">Le paiement s'effectue sur place lors du retrait.</p>
+        <div class="field hidden" id="fAddress">
+          <label for="address" id="labelAddress">Adresse de livraison</label>
+          <textarea id="address" placeholder="Votre adresse complète à Casablanca..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-confirm" id="btnConfirm">Confirmer</button>
+      </form>
+      <p class="modal-note" id="modalNote">Le paiement s'effectue sur place lors du retrait.</p>
     </div>
   </div>
 
 <script>
 (function(){
   'use strict';
+  const TRANSLATIONS = {
+    fr: { dir:'ltr', lang:'fr', heroEyebrow:'Café · Desserts · Casablanca', heroTitle:'Des douceurs<br><em>à emporter</em>', heroDesc:'Commandez en ligne en quelques secondes et récupérez votre commande directement au comptoir.', heroCta:'Voir le menu &darr;', menuTitle:'Notre menu', menuSub:'Prix en MAD', tile1Title:'Retrait sur place', tile1Desc:'Prêt en 10–15 minutes', tile2Title:'Paiement au comptoir', tile2Desc:'Espèces ou carte', tile3Title:'Horaires', tile3Desc:'Tous les jours, 12h00 – 23h30', footer:'© 2026 M n Dubai l casa — Casablanca.', btnOrder:'Commander', modalTitle:'Votre commande', labelPhone:'Numéro de téléphone', labelTime:'Heure de retrait souhaitée', labelAddress:'Adresse de livraison', btnConfirm:'Confirmer', modalNotePickup:"Le paiement s'effectue sur place lors du retrait.", modalNoteDelivery:"Le paiement s'effectue en espèces à la livraison.", btnAdd:'Ajouter', modePickup:'À emporter', modeDelivery:'Livraison', timeCloseAlert:'Désolé, nous sommes fermés. Horaires: 12h00 - 23h30.', labelTotal:'Total', cartArticle:'article', cartArticles:'articles', cats:{boissons:'Boissons Chaudes',cups:'Cups Gourmands',froides:'Boissons Froides',jus:'Jus & Smoothies'}
+    },
+    en: { dir:'ltr', lang:'en', heroEyebrow:'Café · Desserts · Casablanca', heroTitle:'Sweet treats<br><em>to go</em>', heroDesc:'Order online in seconds and pick up directly at the counter or choose delivery.', heroCta:'See the menu &darr;', menuTitle:'Our Menu', menuSub:'Prices in MAD', tile1Title:'In-store Pickup', tile1Desc:'Ready in 10–15 mins', tile2Title:'Counter Payment', tile2Desc:'Cash or Card', tile3Title:'Opening Hours', tile3Desc:'Every day, 12:00 – 23:30', footer:'© 2026 M n Dubai l casa — Casablanca.', btnOrder:'Checkout', modalTitle:'Your Order', labelPhone:'Phone number', labelTime:'Requested pickup time', labelAddress:'Delivery address', btnConfirm:'Confirm', modalNotePickup:'Payment is made on-site upon pickup.', modalNoteDelivery:'Payment is made in cash upon delivery.', btnAdd:'Add', modePickup:'Pickup', modeDelivery:'Delivery', timeCloseAlert:'Sorry, we are closed. Working hours: 12:00 - 23:30.', labelTotal:'Total', cartArticle:'item', cartArticles:'items', cats:{boissons:'Hot Drinks',cups:'Gourmand Cups',froides:'Iced Drinks',jus:'Juices & Smoothies'}
+    },
+    ar: { dir:'rtl', lang:'ar', heroEyebrow:'مقهى · حلويات · الدار البيضاء', heroTitle:'حلويات شهية<br><em>للجلب</em>', heroDesc:'اطلب عبر الإنترنت في ثوانٍ واستلم طلبك مباشرة من المنضدة или اختر التوصيل.', heroCta:'عرض القائمة &darr;', menuTitle:'قائمتنا', menuSub:'الأسعار بالدرهم المغربي', tile1Title:'الاستلام من المتجر', tile1Desc:'جاهز في 10-15 دقيقة', tile2Title:'الدفع عند المنضدة', tile2Desc:'نقداً أو بالبطاقة', tile3Title:'أوقات العمل', tile3Desc:'يومياً، 12:00 – 23:30', footer:'© 2026 M n Dubai l casa — الدار البيضاء.', btnOrder:'إتمام الطلب', modalTitle:'طلبك', labelPhone:'رقم الهاتف', labelTime:'وقت الاستلام المطلوب', labelAddress:'عنوان التوصيل', btnConfirm:'تأكيد', modalNotePickup:'يتم الدفع في عين المكان عند الاستلام.', modalNoteDelivery:'الدفع نقداً عند الاستلام.', btnAdd:'إضافة', modePickup:'جلب', modeDelivery:'توصيل', timeCloseAlert:'معذرة، نحن مغلقون الآن. أوقات العمل: 12:00 - 23:30.', labelTotal:'الإجمالي', cartArticle:'منتج', cartArticles:'منتجات', cats:{boissons:'مشروبات ساخنة',cups:'أكواب غيورماند',froides:'مشروبات باردة',jus:'عصائر وسموذي'}
+    }
+  };
 
-  /* ============ DATA ============ */
   const PRODUCTS = [
-    { id: 'boissons',  name: 'Boissons Chaudes',       price: 30 },
-    { id: 'brownie',   name: 'Cup Dubai Brownie Small', price: 45 },
-    { id: 'matcha',    name: 'Matcha M',                price: 50 },
-    { id: 'expresso',  name: 'Expresso',                price: 18 }
+    { id:'c1', cat:'boissons', price:30, names:{fr:'Cafe latte pistache',en:'Pistachio Cafe Latte',ar:'كافيه لاتيه بالفستق'}, descs:{fr:'café latte crème pistache',en:'espresso with premium pistachio cream',ar:'إсبريسو مع كريمة الفستق الممтаزة'} },
+    { id:'c2', cat:'boissons', price:18, names:{fr:'Expresso',en:'Espresso',ar:'إسبريسو'}, descs:{fr:'',en:'',ar:''} },
+    { id:'c3', cat:'boissons', price:24, names:{fr:'Cappuccino',en:'Cappuccino',ar:'كابوتشينو'}, descs:{fr:'',en:'',ar:''} },
+    { id:'g1', cat:'cups', price:45, names:{fr:'Cup Dubai Brownie Small',en:'Cup Dubai Brownie Small',ar:'كوب دبي براوني صغير'}, descs:{fr:'fraises, brownie, kunafa, crème pistache, nutella',en:'strawberries, brownie, kunafa, pistachio cream, nutella',ar:'فراولة، براوني، كنافة، كريمة الفستق، نوتيلا'} },
+    { id:'g2', cat:'cups', price:40, names:{fr:'Cup Dubai Noisette Large',en:'Cup Dubai Noisette Large',ar:'كوب دبي بندق كبير'}, descs:{fr:'fraises, kunafa, crème noisette, noisettes concassées, nutella',en:'strawberries, kunafa, hazelnut cream, crushed hazelnuts, nutella',ar:'فراولة، كنافة، كريمة البندق، بندق مجروش، نوتيلا'} },
+    { id:'g3', cat:'cups', price:35, names:{fr:'Cup Healthy Small',en:'Cup Healthy Small',ar:'كوب صحي صغير'}, descs:{fr:'',en:'',ar:''} },
+    { id:'f1', cat:'froides', price:50, names:{fr:'Matcha M',en:'Matcha M',ar:'ماتشا M'}, descs:{fr:'matcha classic',en:'classic ceremonial matcha',ar:'ماتشا كلاسيكية'} },
+    { id:'f2', cat:'froides', price:64, names:{fr:'Matcha Mangue L',en:'Mango Matcha L',ar:'ماتشا المانجو كبير'}, descs:{fr:'',en:'',ar:''} },
+    { id:'f3', cat:'froides', price:48, names:{fr:'Iced Caramel Macchiato L',en:'Iced Caramel Macchiato L',ar:'آيس كراميل ماكياتو كبير'}, descs:{fr:'espresso, milk, caramel',en:'espresso, milk, caramel syrup',ar:'إسبريسو، حليب، سيرب الكراميل'} },
+    { id:'f4', cat:'froides', price:32, names:{fr:'Iced Latte M',en:'Iced Latte M',ar:'آيس لاتيه وسط'}, descs:{fr:'lait, espresso',en:'milk, espresso',ar:'حليب، إسبريسو'} },
+    { id:'j1', cat:'jus', price:28, names:{fr:'Jus Mangue',en:'Mango Juice',ar:'عصير مانجو'}, descs:{fr:'',en:'',ar:''} },
+    { id:'j2', cat:'jus', price:28, names:{fr:'Jus Fraises',en:'Strawberry Juice',ar:'عصير فراولة'}, descs:{fr:'',en:'',ar:''} },
+    { id:'j3', cat:'jus', price:23, names:{fr:'Jus D\'orange',en:'Orange Juice',ar:'عصير برتقال'}, descs:{fr:'',en:'',ar:''} }
   ];
 
-  const cart = {}; // id -> qty
+  let currentLang = 'fr', currentCat = 'boissons', fulfillMode = 'pickup';
+  const cart = {};
+  const menuCard = document.getElementById('menuCard'), cartBar = document.getElementById('cartBar'), cartCountEl = document.getElementById('cartCount'), cartTotalEl = document.getElementById('cartTotal'), btnOrder = document.getElementById('btnOrder'), modalOverlay = document.getElementById('modalOverlay'), modalClose = document.getElementById('modalClose'), orderForm = document.getElementById('orderForm'), langToggle = document.getElementById('langToggle'), tabsWrapper = document.getElementById('tabsWrapper');
 
-  /* ============ DOM ============ */
-  const menuCard     = document.getElementById('menuCard');
-  const cartBar      = document.getElementById('cartBar');
-  const cartCountEl  = document.getElementById('cartCount');
-  const cartTotalEl  = document.getElementById('cartTotal');
-  const btnOrder     = document.getElementById('btnOrder');
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalClose   = document.getElementById('modalClose');
-  const orderList    = document.getElementById('orderList');
-  const orderTotalEl = document.getElementById('orderTotal');
-  const orderForm    = document.getElementById('orderForm');
+  function renderTabs() {
+    tabsWrapper.innerHTML = '';
+    const cats = ['boissons', 'cups', 'froides', 'jus'];
+    cats.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (currentCat === c ? ' active' : '');
+      btn.textContent = TRANSLATIONS[currentLang].cats[c];
+      btn.onclick = () => { currentCat = c; renderTabs(); renderMenu(); };
+      tabsWrapper.appendChild(btn);
+    });
+  }
 
-  /* ============ RENDER MENU ============ */
-  PRODUCTS.forEach(function(p){
-    const item = document.createElement('article');
-    item.className = 'menu-item';
-    item.innerHTML =
-      '<div class="item-info">' +
-        '<h3>' + p.name + '</h3>' +
-        '<span class="item-price">' + p.price + ' MAD</span>' +
-      '</div>' +
-      '<div class="item-action" data-id="' + p.id + '">' +
-        '<button class="btn-add" type="button">Ajouter</button>' +
-        '<div class="stepper">' +
-          '<button class="dec" type="button" aria-label="Retirer">&minus;</button>' +
-          '<span class="qty">1</span>' +
-          '<button class="inc" type="button" aria-label="Ajouter">+</button>' +
-        '</div>' +
-      '</div>';
-    menuCard.appendChild(item);
+  function renderMenu() {
+    menuCard.innerHTML = '';
+    const filtered = PRODUCTS.filter(p => p.cat === currentCat);
+    filtered.forEach(p => {
+      const qty = cart[p.id] || 0, activeClass = qty > 0 ? 'active' : '', descHtml = p.descs[currentLang] ? `<span class="item-desc">${p.descs[currentLang]}</span>` : '';
+      const item = document.createElement('article');
+      item.className = 'menu-item';
+      item.innerHTML = `<div class="item-info"><h3>${p.names[currentLang]}</h3>${descHtml}<span class="item-price">${p.price} MAD</span></div><div class="item-action ${activeClass}" data-id="${p.id}"><button class="btn-add" type="button">${TRANSLATIONS[currentLang].btnAdd}</button><div class="stepper"><button class="dec" type="button">&minus;</button><span class="qty">${qty > 0 ? qty : 1}</span><button class="inc" type="button">+</button></div></div>`;
+      menuCard.appendChild(item);
+    });
+  }
+
+  function switchLanguage(lang) {
+    currentLang = lang; const t = TRANSLATIONS[lang];
+    document.documentElement.dir = t.dir; document.documentElement.lang = lang;
+    document.getElementById('heroEyebrow').textContent = t.heroEyebrow; document.getElementById('heroTitle').innerHTML = t.heroTitle; document.getElementById('heroDesc').textContent = t.heroDesc; document.getElementById('heroCta').innerHTML = t.heroCta; document.getElementById('menuTitle').textContent = t.menuTitle; document.getElementById('menuSub').textContent = t.menuSub;
+    document.getElementById('labelTotal').textContent = t.labelTotal;
+    ['tile1','tile2','tile3'].forEach((id, i) => { const el = document.getElementById(id); if(el) { el.querySelector('strong').textContent = t[`tile${i+1}Title`]; el.querySelector('span').textContent = t[`tile${i+1}Desc`]; } });
+    document.getElementById('footerEl').textContent = t.footer; btnOrder.textContent = t.btnOrder; document.getElementById('modalTitle').textContent = t.modalTitle; document.getElementById('labelPhone').textContent = t.labelPhone; document.getElementById('labelTime').textContent = t.labelTime; document.getElementById('labelAddress').textContent = t.labelAddress; document.getElementById('btnConfirm').textContent = t.btnConfirm;
+    document.getElementById('modePickup').textContent = t.modePickup; document.getElementById('modeDelivery').textContent = t.modeDelivery;
+    langToggle.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    updateModalFulfillmentUI(); renderTabs(); renderMenu(); updateCartBar();
+  }
+
+  function setQty(id, qty) { if (qty <= 0) delete cart[id]; else cart[id] = qty; updateItemUI(id); updateCartBar(); }
+  function updateItemUI(id) { const action = menuCard.querySelector(`.item-action[data-id="${id}"]`); if (!action) return; const qty = cart[id] || 0, qtyEl = action.querySelector('.qty'); action.classList.toggle('active', qty > 0); if (qty > 0) qtyEl.textContent = qty; }
+  
+  function updateCartBar() {
+    let count = 0, total = 0; for (const id in cart) { const p = PRODUCTS.find(x => x.id === id); if (p) { count += cart[id]; total += cart[id] * p.price; } }
+    if (count > 0) { cartCountEl.textContent = count + ' ' + (count > 1 ? TRANSLATIONS[currentLang].cartArticles : TRANSLATIONS[currentLang].cartArticle); cartTotalEl.textContent = total; cartBar.classList.add('visible'); } else { cartBar.classList.remove('visible'); }
+  }
+
+  menuCard.addEventListener('click', e => { const action = e.target.closest('.item-action'); if (!action) return; const id = action.dataset.id, qty = cart[id] || 0; if (e.target.closest('.btn-add')) setQty(id, 1); else if (e.target.closest('.inc')) setQty(id, qty + 1); else if (e.target.closest('.dec')) setQty(id, qty - 1); });
+  langToggle.addEventListener('click', e => { const b = e.target.closest('.lang-btn'); if (b) switchLanguage(b.dataset.lang); });
+
+  function checkBusinessHours() {
+    const now = new Date(), hr = now.getHours(), min = now.getMinutes(), time = hr + min/60;
+    const isOpen = time >= 12.0 && time <= 23.5;
+    const btn = document.getElementById('btnConfirm'), alertEl = document.getElementById('timeAlert') || createAlertEl();
+    if (!isOpen) { btn.disabled = true; alertEl.textContent = TRANSLATIONS[currentLang].timeCloseAlert; alertEl.style.display = 'block'; } else { btn.disabled = false; alertEl.style.display = 'none'; }
+  }
+  function createAlertEl() { const d = document.createElement('div'); d.id = 'timeAlert'; d.className = 'time-alert'; document.getElementById('orderForm').insertBefore(d, document.getElementById('btnConfirm')); return d; }
+
+  function updateModalFulfillmentUI() {
+    const isPickup = fulfillMode === 'pickup', t = TRANSLATIONS[currentLang];
+    document.getElementById('modePickup').classList.toggle('active', isPickup); document.getElementById('modeDelivery').classList.toggle('active', !isPickup);
+    document.getElementById('fTime').classList.toggle('hidden', !isPickup); document.getElementById('fAddress').classList.toggle('hidden', isPickup);
+    document.getElementById('pickupTime').required = isPickup; document.getElementById('address').required = !isPickup;
+    document.getElementById('modalNote').textContent = isPickup ? t.modalNotePickup : t.modalNoteDelivery;
+  }
+
+  document.getElementById('fulfillToggle').addEventListener('click', e => { const b = e.target.closest('.fulfill-btn'); if (b) { fulfillMode = b.dataset.mode; updateModalFulfillmentUI(); } });
+  
+  btnOrder.addEventListener('click', () => {
+    const list = document.getElementById('orderList') || createOrderList(); list.innerHTML = ''; let gTotal = 0;
+    for (const id in cart) { const p = PRODUCTS.find(x => x.id === id); if (p) { const sub = p.price * cart[id]; gTotal += sub; const li = document.createElement('li'); li.innerHTML = `<span class="li-name">${p.names[currentLang]}<small>&times;${cart[id]}</small></span><span class="li-sum">${sub} MAD</span>`; list.appendChild(li); } }
+    document.getElementById('orderTotal').textContent = gTotal; modalOverlay.classList.add('open'); checkBusinessHours();
+  });
+  function createOrderList() { const ul = document.createElement('ul'); ul.id = 'orderList'; ul.className = 'order-list'; document.querySelector('.modal').insertBefore(ul, document.querySelector('.order-grand')); return ul; }
+
+  modalClose.addEventListener('click', () => modalOverlay.classList.remove('open'));
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) modalOverlay.classList.remove('open'); });
+
+  orderForm.addEventListener('submit', e => {
+    e.preventDefault(); const phone = document.getElementById('phone').value.trim();
+    let lines = ['🧾 * Nouvelles commandes — M n Dubai l casa*', ''];
+    let total = 0; for (const id in cart) { const p = PRODUCTS.find(x => x.id === id); if (p) { total += p.price * cart[id]; lines.push(`• ${p.names[currentLang]} ×${cart[id]} — ${p.price * cart[id]} MAD`); } }
+    lines.push('', `💰 *Total : ${total} MAD*`, `📞 Tel : ${phone}`);
+    if (fulfillMode === 'pickup') lines.push(`🕒 Retrait : ${document.getElementById('pickupTime').value}`); else lines.push(`📍 Adresse : ${document.getElementById('address').value.trim()}`);
+    lines.push('', fulfillMode === 'pickup' ? TRANSLATIONS[currentLang].modalNotePickup : TRANSLATIONS[currentLang].modalNoteDelivery);
+    window.open('https://wa.me' + encodeURIComponent(lines.join('\n')), '_blank');
+    modalOverlay.classList.remove('open'); for (const id in cart) delete cart[id]; switchLanguage(currentLang); orderForm.reset();
   });
 
-  /* ============ CART LOGIC ============ */
-  function setQty(id, qty){
-    if (qty <= 0){
-      delete cart[id];
-    } else {
-      cart[id] = qty;
-    }
-    updateItemUI(id);
-    updateCartBar();
-  }
-
-  function getQty(id){
-    return cart[id] || 0;
-  }
-
-  function updateItemUI(id){
-    const action = menuCard.querySelector('.item-action[data-id="' + id + '"]');
-    if (!action) return;
-    const qty = getQty(id);
-    const qtyEl = action.querySelector('.qty');
-
-    if (qty > 0){
-      action.classList.add('active');
-      qtyEl.textContent = qty;
-    } else {
-      action.classList.remove('active');
-    }
-  }
-
-  function cartTotals(){
-    let count = 0, total = 0;
-    for (const id in cart){
-      const p = PRODUCTS.find(function(x){ return x.id === id; });
-      if (!p) continue;
-      count += cart[id];
-      total += cart[id] * p.price;
-    }
-    return { count: count, total: total };
-  }
-
-  function updateCartBar(){
-    const t = cartTotals();
-    if (t.count > 0){
-      cartCountEl.textContent = t.count + (t.count > 1 ? ' articles' : ' article');
-      cartTotalEl.textContent = t.total;
-      cartBar.classList.add('visible');
-    } else {
-      cartBar.classList.remove('visible');
-    }
-  }
-
-  /* ============ MENU EVENTS (delegation) ============ */
-  menuCard.addEventListener('click', function(e){
-    const action = e.target.closest('.item-action');
-    if (!action) return;
-    const id = action.dataset.id;
-
-    if (e.target.closest('.btn-add')){
-      setQty(id, 1);
-    } else if (e.target.closest('.inc')){
-      setQty(id, getQty(id) + 1);
-    } else if (e.target.closest('.dec')){
-      setQty(id, getQty(id) - 1);
-    }
-  });
-
-  /* ============ MODAL ============ */
-  function openModal(){
-    // build order recap
-    orderList.innerHTML = '';
-    for (const id in cart){
-      const p = PRODUCTS.find(function(x){ return x.id === id; });
-      if (!p) continue;
-      const li = document.createElement('li');
-      li.innerHTML =
-        '<span class="li-name">' + p.name + '<small>&times;' + cart[id] + '</small></span>' +
-        '<span class="li-sum">' + (p.price * cart[id]) + ' MAD</span>';
-      orderList.appendChild(li);
-    }
-    orderTotalEl.textContent = cartTotals().total;
-
-    modalOverlay.classList.add('open');
-    modalOverlay.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal(){
-    modalOverlay.classList.remove('open');
-    modalOverlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  btnOrder.addEventListener('click', openModal);
-  modalClose.addEventListener('click', closeModal);
-
-  modalOverlay.addEventListener('click', function(e){
-    if (e.target === modalOverlay) closeModal();
-  });
-
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && modalOverlay.classList.contains('open')) closeModal();
-  });
-
-  /* ============ ORDER SUBMIT → WHATSAPP ============ */
-  const WHATSAPP_NUMBER = '212600000000'; // ← remplacez par votre numéro (format international sans +)
-
-  orderForm.addEventListener('submit', function(e){
-    e.preventDefault();
-
-    const phone = document.getElementById('phone').value.trim();
-    const time  = document.getElementById('pickupTime').value;
-
-    if (!phone){
-      document.getElementById('phone').focus();
-      return;
-    }
-    if (!time){
-      document.getElementById('pickupTime').focus();
-      return;
-    }
-
-    let lines = ['🧾 *Nouvelle commande — M n Dubai l casa*', ''];
-    for (const id in cart){
-      const p = PRODUCTS.find(function(x){ return x.id === id; });
-      if (!p) continue;
-      lines.push('• ' + p.name + ' ×' + cart[id] + ' — ' + (p.price * cart[id]) + ' MAD');
-    }
-    lines.push('');
-    lines.push('💰 *Total : ' + cartTotals().total + ' MAD*');
-    lines.push('📞 Téléphone : ' + phone);
-    lines.push('🕒 Retrait : ' + time);
-    lines.push('');
-    lines.push('Paiement sur place.');
-
-    const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(lines.join('\n'));
-    window.open(url, '_blank');
-
-    // reset
-    closeModal();
-    for (const id in cart) delete cart[id];
-    PRODUCTS.forEach(function(p){ updateItemUI(p.id); });
-    updateCartBar();
-    orderForm.reset();
-  });
-
-  /* ============ DEFAULT PICKUP TIME ============ */
-  (function setDefaultTime(){
-    const d = new Date(Date.now() + 20 * 60000); // +20 min
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mm = String(d.getMinutes()).padStart(2, '0');
-    document.getElementById('pickupTime').value = hh + ':' + mm;
-  })();
-
+  const d = new Date(Date.now() + 20 * 60000); document.getElementById('pickupTime').value = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  switchLanguage('fr');
 })();
 </script>
 </body>
